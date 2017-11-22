@@ -15,9 +15,9 @@ task run(type: JavaExec) {
 }
 
 buildscript {
-    ext.kotlin_version = '1.1.4'
+    ext.kotlin_version = '1.1.60'
     ext.jvm_version = '1.8'
-    ext.junit_platform_version = '1.0.0-M4'
+    ext.junit_platform_version = '1.0.1'
     repositories {
         mavenCentral()
         maven { url "https://plugins.gradle.org/m2/" }
@@ -31,16 +31,21 @@ buildscript {
 apply plugin: "org.junit.platform.gradle.plugin"
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre8', version: kotlin_version
-    compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-jdk8', version: '0.17'
-    compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: '0.17'
-    testCompile 'org.junit.jupiter:junit-jupiter-api:5.0.0-M4'
-    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.0.0-M4'
+
+    // Junit
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.0.1'
+    testRuntime "org.junit.platform:junit-platform-launcher:$junit_platform_version"
+    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.0.1'
 }
 
 junitPlatform {
     platformVersion = junit_platform_version
+    filters {
+        engines {
+            include 'junit-jupiter'
+        }
+    }
 }
 
 repositories {
