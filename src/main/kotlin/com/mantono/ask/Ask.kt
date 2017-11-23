@@ -8,8 +8,8 @@ import java.util.*
 
 val scanner = Scanner(System.`in`)
 
-val bold: AnsiCode = TermColors(TermColors.Level.ANSI16).bold
-val reset: AnsiCode = TermColors(TermColors.Level.ANSI16).reset
+val bold: AnsiCode = TermColors(TermColors.Level.TRUECOLOR).bold
+val reset: AnsiCode = TermColors(TermColors.Level.TRUECOLOR).reset
 
 fun readLine(prompt: String, default: String? = null): String
 {
