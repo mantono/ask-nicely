@@ -10,12 +10,13 @@ description = 'description of project'
 defaultTasks 'run'
 
 task run(type: JavaExec) {
-    main = 'com.mantono.KotlinMainClassKt' //Important that 'Kt' is appended to class name
+    main = 'com.mantono.ask.MainKt' //Important that 'Kt' is appended to class name
     classpath = sourceSets.main.runtimeClasspath
 }
 
 buildscript {
     ext.kotlin_version = '1.1.60'
+    ext.kotlin_api_version = '1.1'
     ext.jvm_version = '1.8'
     ext.junit_platform_version = '1.0.1'
     repositories {
@@ -32,6 +33,9 @@ apply plugin: "org.junit.platform.gradle.plugin"
 
 dependencies {
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre8', version: kotlin_version
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+
+    compile 'com.github.ajalt.mordant:mordant:1.0.0'
 
     // Junit
     testCompile 'org.junit.jupiter:junit-jupiter-api:5.0.1'
@@ -54,10 +58,12 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 
-compileKotlin {
-    sourceCompatibility = jvm_version
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     kotlinOptions {
+        languageVersion = kotlin_api_version
+        apiVersion = kotlin_api_version
         jvmTarget = jvm_version
+        javaParameters = true   // Useful for reflection.
     }
 }
 
@@ -101,4 +107,8 @@ artifacts {
 task wrapper(type: Wrapper) {
     description = 'Generates gradlew[.bat] scripts for faster execution'
     gradleVersion = '4.0'
+}
+
+run {
+    standardInput = System.in
 }

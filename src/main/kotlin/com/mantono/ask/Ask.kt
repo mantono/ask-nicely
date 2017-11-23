@@ -1,45 +1,59 @@
 package com.mantono.ask
 
+import com.github.ajalt.mordant.AnsiCode
+import com.github.ajalt.mordant.TermColors
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.*
 
 val scanner = Scanner(System.`in`)
 
-fun readLine(prompt: String, default: String? = null): String {
+val bold: AnsiCode = TermColors(TermColors.Level.ANSI16).bold
+val reset: AnsiCode = TermColors(TermColors.Level.ANSI16).reset
+
+fun readLine(prompt: String, default: String? = null): String
+{
 	val def = default?.let { " [$default]" } ?: ""
 	System.out.print("$prompt$def:")
 	return scanner.nextLine()
 }
 
-inline fun <reified T> readLine(prompt: String, default: T? = null): T
+inline fun <reified T> readLine(prompt: String, default: T? = null): T?
+{
+	val def = default?.let { "[$default]" } ?: ""
+	System.out.print("$prompt$def:")
+	val answer: String = scanner.nextLine()
+	if(answer.isBlank()) return default
+
+	return try
+	{
+		when(T::class)
+		{
+			Byte::class -> answer.toByte() as T
+			Short::class -> answer.toShort() as T
+			Int::class -> answer.toInt() as T
+			Long::class -> answer.removeSuffix("L").toLong() as T
+			Float::class -> answer.toFloat() as T
+			Double::class -> answer.toDouble() as T
+			Boolean::class -> answer.toBoolean() as T
+			BigInteger::class -> BigInteger(answer) as T
+			BigDecimal::class -> BigDecimal(answer) as T
+			String::class -> answer as T
+			else -> throw IllegalArgumentException("Unsupported class for parsing: ${T::class::qualifiedName}")
+		}
+	}
+	catch(e: NumberFormatException)
+	{
+		println("A ${T::class.simpleName} was expected, but $answer could not be parsed as such")
+		null
+	}
+}
+
+inline fun <reified T> ask(q: String, default: T? = null): T
 {
 	while(true)
 	{
-		val def = default?.let { " [$default]" } ?: ""
-		System.out.print("$prompt$def:")
-		val answer: String = scanner.nextLine()
-		try
-		{
-			return when(T::class)
-			{
-				Byte::class -> answer.toByte()
-				Short::class -> answer.toShort()
-				Int::class -> answer.toInt()
-				Long::class -> answer.toLong()
-				Float::class -> answer.toFloat()
-				Double::class -> answer.toDouble()
-				Boolean::class -> answer.toBoolean()
-				BigInteger::class -> BigInteger(answer)
-				BigDecimal::class -> BigDecimal(answer)
-				String::class -> answer
-				else -> throw IllegalArgumentException("Unsupported class for parsing: ${T::class::qualifiedName}")
-			} as T
-		}
-		catch(e: NumberFormatException)
-		{
-			println("A ${T::class.simpleName} was expected, but $answer could not be parsed as such")
-		}
+		readLine(q, default)?.let { return it }
 	}
 }
 
