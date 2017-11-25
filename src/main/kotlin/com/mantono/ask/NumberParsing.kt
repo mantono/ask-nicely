@@ -14,12 +14,12 @@ fun String.isDouble(): Boolean = doubleRegex.matches(this)
 
 fun String.isByte(): Boolean
 {
-	if(!isLong()) return false
-	return toLong() in Byte.MIN_VALUE .. Byte.MAX_VALUE
+	if(!isInt()) return false
+	return toInt() in Byte.MIN_VALUE .. Byte.MAX_VALUE
 }
 
 fun String.isShort(): Boolean
 {
-	if(!isLong()) return false
-	return toLong() in Short.MIN_VALUE .. Short.MAX_VALUE
+	if(!isInt()) return false
+	return toInt() in Short.MIN_VALUE .. Short.MAX_VALUE
 }
