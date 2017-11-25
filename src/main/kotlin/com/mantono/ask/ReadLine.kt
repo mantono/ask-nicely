@@ -16,7 +16,7 @@ val reset: AnsiCode = trueColor.reset
 
 fun readLine(prompt: String, default: String? = null, input: InputStream = System.`in`): String
 {
-	val def = default?.let { "$bold[$default]$reset" } ?: ""
+	val def = default?.let { if(default.isNotBlank()) "$bold[$default]$reset" } ?: ""
 	System.out.print("$prompt$def:")
 	return Scanner(input).nextLine()
 }
