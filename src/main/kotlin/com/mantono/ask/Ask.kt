@@ -34,6 +34,21 @@ fun ask(q: String, default: String, input: InputStream = System.`in`): String
 	}
 }
 
+
+tailrec fun ask(q: String, regex: Regex, default: String? = null, input: InputStream = System.`in`): String
+{
+	val response: String = readLine(q, default, input)
+	default?.let { if(response.isBlank()) return default }
+	return when(response.matches(regex))
+	{
+		true -> response
+		false -> {
+			System.out.println(err("The provided input does not match regex $regex"))
+			ask(q, regex, default, input)
+		}
+	}
+}
+
 tailrec fun askBinary(q: String, default: Boolean? = null, input: InputStream = System.`in`): Boolean
 {
 	val response: String = readLine(q, default?.yesOrNo()).toLowerCase()
