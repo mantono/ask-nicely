@@ -16,7 +16,7 @@ tailrec suspend fun ask(q: String, stream: DuplexStream = SystemStream): String
 		true -> response
 		false ->
 		{
-			println(err("This value is mandatory, please provide an input."))
+			stream.write(err("This value is mandatory, please provide an input."))
 			ask(q, stream)
 		}
 	}

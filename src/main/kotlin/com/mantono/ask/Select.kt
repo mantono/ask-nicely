@@ -7,7 +7,7 @@ tailrec suspend fun select(q: String, options: List<String>, default: String? = 
 			throw IllegalArgumentException("Default argument '$default' is not among the available options $options")
 	}
 
-	options.forEachIndexed { i, opt -> println("$i) $opt") }
+	options.forEachIndexed { i, opt -> stream.write("$i) $opt") }
 	val answer = readLine(q, stream = stream)
 	default?.let { if(answer.isBlank()) return default }
 	return when(answer in options)
