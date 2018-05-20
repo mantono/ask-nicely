@@ -5,7 +5,7 @@ apply plugin: 'idea'
 
 group = 'com.mantono'
 version = '1.0-SNAPSHOT'
-description = 'description of project'
+description = 'Library for easier providing an interactive command line interface'
 
 defaultTasks 'run'
 
@@ -15,10 +15,10 @@ task run(type: JavaExec) {
 }
 
 buildscript {
-    ext.kotlin_version = '1.1.60'
-    ext.kotlin_api_version = '1.1'
+    ext.kotlin_version = '1.2.41'
+    ext.kotlin_api_version = '1.2'
     ext.jvm_version = '1.8'
-    ext.junit_platform_version = '1.0.1'
+    ext.junit_platform_version = '1.1.0'
     repositories {
         mavenCentral()
         maven { url "https://plugins.gradle.org/m2/" }
@@ -32,15 +32,17 @@ buildscript {
 apply plugin: "org.junit.platform.gradle.plugin"
 
 dependencies {
-    compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre8', version: kotlin_version
+    compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jdk8', version: kotlin_version
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-jdk8', version: '0.22.5'
+    compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: '0.22.5'
 
-    compile 'com.github.ajalt.mordant:mordant:1.0.0'
+    compile 'com.github.ajalt.mordant:mordant:1.0.1'
 
     // Junit
-    testCompile 'org.junit.jupiter:junit-jupiter-api:5.0.1'
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.1.0'
     testRuntime "org.junit.platform:junit-platform-launcher:$junit_platform_version"
-    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.0.1'
+    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
 }
 
 junitPlatform {
@@ -106,7 +108,7 @@ artifacts {
 
 task wrapper(type: Wrapper) {
     description = 'Generates gradlew[.bat] scripts for faster execution'
-    gradleVersion = '4.0'
+    gradleVersion = '4.7'
 }
 
 run {

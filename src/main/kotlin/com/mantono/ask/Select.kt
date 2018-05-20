@@ -1,8 +1,6 @@
 package com.mantono.ask
 
-import java.io.InputStream
-
-tailrec fun select(q: String, options: List<String>, default: String? = null, input: InputStream = System.`in`): String
+tailrec suspend fun select(q: String, options: List<String>, default: String? = null, stream: DuplexStream = SystemStream): String
 {
 	default?.let {
 		if(it !in options)
@@ -10,7 +8,7 @@ tailrec fun select(q: String, options: List<String>, default: String? = null, in
 	}
 
 	options.forEachIndexed { i, opt -> println("$i) $opt") }
-	val answer = readLine(q)
+	val answer = readLine(q, stream = stream)
 	default?.let { if(answer.isBlank()) return default }
 	return when(answer in options)
 	{
@@ -24,14 +22,14 @@ tailrec fun select(q: String, options: List<String>, default: String? = null, in
 					return options[i]
 			}
 			println(err("'$answer' is not a valid option"))
-			select(q, options, default, input)
+			select(q, options, default, stream)
 		}
 	}
 }
 
-inline fun <reified T: Enum<T>> select(q: String, default: T? = null, input: InputStream = System.`in`): T
+suspend inline fun <reified T: Enum<T>> select(q: String, default: T? = null, stream: DuplexStream = SystemStream): T
 {
 	val options: List<String> = enumValues<T>().map { it.name }.toList()
-	val answer: String = select(q, options, default?.name, input)
+	val answer: String = select(q, options, default?.name, stream)
 	return enumValueOf(answer)
 }

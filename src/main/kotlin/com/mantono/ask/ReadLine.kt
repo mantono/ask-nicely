@@ -2,30 +2,27 @@ package com.mantono.ask
 
 import com.github.ajalt.mordant.AnsiCode
 import com.github.ajalt.mordant.TermColors
-import java.io.InputStream
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.*
-
-val scanner = Scanner(System.`in`)
 
 private val trueColor: TermColors = TermColors(TermColors.Level.TRUECOLOR)
 val bold: AnsiCode = trueColor.bold
 val err: AnsiCode = trueColor.red
 val reset: AnsiCode = trueColor.reset
 
-fun readLine(prompt: String, default: String? = null, input: InputStream = System.`in`): String
+suspend fun readLine(prompt: String, default: String? = null, stream: DuplexStream = SystemStream): String
 {
 	val def = default?.let { if(default.isNotBlank()) "$bold[$default]$reset" } ?: ""
-	System.out.print("$prompt$def:")
-	return Scanner(input).nextLine()
+	stream.write("$prompt$def:")
+	return stream.read()
 }
 
-inline fun <reified T> readLine(prompt: String, default: T? = null, input: InputStream = System.`in`): T?
+suspend inline fun <reified T> readLine(prompt: String, default: T? = null, stream: DuplexStream = SystemStream): T?
 {
 	val def = default?.let { "[$default]" } ?: ""
-	System.out.print("$prompt$def:")
-	val answer: String = Scanner(input).nextLine()
+	stream.write("$prompt$def:")
+	val answer: String = stream.read()
 	if(answer.isBlank()) return default
 
 	return try
@@ -47,7 +44,7 @@ inline fun <reified T> readLine(prompt: String, default: T? = null, input: Input
 	}
 	catch(e: NumberFormatException)
 	{
-		println(err("A ${T::class.simpleName} was expected, but '$answer' could not be parsed as such"))
+		stream.write(err("A ${T::class.simpleName} was expected, but '$answer' could not be parsed as such"))
 		null
 	}
 }
