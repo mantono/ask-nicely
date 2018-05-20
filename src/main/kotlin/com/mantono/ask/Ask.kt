@@ -1,6 +1,6 @@
 package com.mantono.ask
 
-suspend inline fun <reified T> ask(q: String, default: T? = null, stream: DuplexStream = SystemStream): T
+suspend inline fun <reified T> ask(q: String, default: T? = null, stream: Duplex = SystemStream): T
 {
 	while(true)
 	{
@@ -8,7 +8,7 @@ suspend inline fun <reified T> ask(q: String, default: T? = null, stream: Duplex
 	}
 }
 
-tailrec suspend fun ask(q: String, stream: DuplexStream = SystemStream): String
+tailrec suspend fun ask(q: String, stream: Duplex = SystemStream): String
 {
 	val response: String = readLine(q, stream = stream)
 	return when(response.isNotBlank())
@@ -22,7 +22,7 @@ tailrec suspend fun ask(q: String, stream: DuplexStream = SystemStream): String
 	}
 }
 
-suspend fun ask(q: String, default: String, stream: DuplexStream = SystemStream): String
+suspend fun ask(q: String, default: String, stream: Duplex = SystemStream): String
 {
 	val response: String = readLine(q, default, stream)
 	return when(response.isNotBlank())
@@ -33,7 +33,7 @@ suspend fun ask(q: String, default: String, stream: DuplexStream = SystemStream)
 }
 
 
-tailrec suspend fun ask(q: String, regex: Regex, default: String? = null, stream: DuplexStream = SystemStream): String
+tailrec suspend fun ask(q: String, regex: Regex, default: String? = null, stream: Duplex = SystemStream): String
 {
 	val response: String = readLine(q, default, stream)
 	default?.let { if(response.isBlank()) return default }
@@ -47,7 +47,7 @@ tailrec suspend fun ask(q: String, regex: Regex, default: String? = null, stream
 	}
 }
 
-tailrec suspend fun askBinary(q: String, default: Boolean? = null, stream: DuplexStream = SystemStream): Boolean
+tailrec suspend fun askBinary(q: String, default: Boolean? = null, stream: Duplex = SystemStream): Boolean
 {
 	val response: String = readLine(q, default?.yesOrNo(), stream).toLowerCase()
 	return when(response)

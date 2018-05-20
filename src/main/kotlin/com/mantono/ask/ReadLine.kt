@@ -4,21 +4,20 @@ import com.github.ajalt.mordant.AnsiCode
 import com.github.ajalt.mordant.TermColors
 import java.math.BigDecimal
 import java.math.BigInteger
-import java.util.*
 
 private val trueColor: TermColors = TermColors(TermColors.Level.TRUECOLOR)
 val bold: AnsiCode = trueColor.bold
 val err: AnsiCode = trueColor.red
 val reset: AnsiCode = trueColor.reset
 
-suspend fun readLine(prompt: String, default: String? = null, stream: DuplexStream = SystemStream): String
+suspend fun readLine(prompt: String, default: String? = null, stream: Duplex = SystemStream): String
 {
 	val def = default?.let { if(default.isNotBlank()) "$bold[$default]$reset" } ?: ""
 	stream.write("$prompt$def:")
 	return stream.read()
 }
 
-suspend inline fun <reified T> readLine(prompt: String, default: T? = null, stream: DuplexStream = SystemStream): T?
+suspend inline fun <reified T> readLine(prompt: String, default: T? = null, stream: Duplex = SystemStream): T?
 {
 	val def = default?.let { "[$default]" } ?: ""
 	stream.write("$prompt$def:")

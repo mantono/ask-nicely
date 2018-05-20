@@ -3,17 +3,16 @@ package com.mantono.ask
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.InputStream
-import java.io.OutputStream
+import java.util.*
 
-fun fakeInput(input: String): DuplexStream
+fun fakeInput(vararg input: String): Duplex
 {
-	return object: DuplexStream
+	return object: Duplex
 	{
-		override val output: OutputStream = ByteArrayOutputStream()
-		override val input =  ByteArrayInputStream(input.toByteArray())
+		private val queue: Queue<String> = LinkedList(input.toList())
+		override suspend fun write(data: String): Int = data.toByteArray().size
+		override suspend fun read(): String = queue.poll()
+		override fun close() { }
 	}
 }
 
