@@ -7,12 +7,7 @@ group = 'com.mantono'
 version = '1.0-SNAPSHOT'
 description = 'Library for easier providing an interactive command line interface'
 
-defaultTasks 'run'
-
-task run(type: JavaExec) {
-    main = 'com.mantono.ask.MainKt' //Important that 'Kt' is appended to class name
-    classpath = sourceSets.main.runtimeClasspath
-}
+defaultTasks 'test'
 
 buildscript {
     ext.kotlin_version = '1.2.41'
@@ -109,8 +104,4 @@ artifacts {
 task wrapper(type: Wrapper) {
     description = 'Generates gradlew[.bat] scripts for faster execution'
     gradleVersion = '4.7'
-}
-
-run {
-    standardInput = System.in
 }
