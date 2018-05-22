@@ -8,34 +8,25 @@ suspend inline fun <reified T> ask(q: String, default: T? = null, stream: Duplex
 	}
 }
 
-tailrec suspend fun ask(q: String, stream: Duplex = SystemStream): String
+tailrec suspend fun ask(q: String, default: String? = null, stream: Duplex = SystemStream): String
 {
-	val response: String = readLine(q, stream = stream)
-	return when(response.isNotBlank())
+	val response: String? = readLine(q, default, stream = stream)
+
+	return when
 	{
-		true -> response
-		false ->
+		response.isNotNullOrBlank() -> response!!
+		default.isNotNullOrBlank() -> default!!
+		else ->
 		{
 			stream.write(err("This value is mandatory, please provide an input."))
-			ask(q, stream)
+			ask(q, default, stream)
 		}
 	}
 }
 
-suspend fun ask(q: String, default: String, stream: Duplex = SystemStream): String
-{
-	val response: String = readLine(q, default, stream)
-	return when(response.isNotBlank())
-	{
-		true -> response
-		false -> default
-	}
-}
-
-
 tailrec suspend fun ask(q: String, regex: Regex, default: String? = null, stream: Duplex = SystemStream): String
 {
-	val response: String = readLine(q, default, stream)
+	val response: String = readLine(q, default, stream) ?: ""
 	default?.let { if(response.isBlank()) return default }
 	return when(response.matches(regex))
 	{
@@ -49,7 +40,7 @@ tailrec suspend fun ask(q: String, regex: Regex, default: String? = null, stream
 
 tailrec suspend fun askBinary(q: String, default: Boolean? = null, stream: Duplex = SystemStream): Boolean
 {
-	val response: String = readLine(q, default?.yesOrNo(), stream).toLowerCase()
+	val response: String = readLine(q, default?.yesOrNo(), stream)?.toLowerCase() ?: ""
 	return when(response)
 	{
 		"yes", "y", "true" -> true

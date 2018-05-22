@@ -8,7 +8,7 @@ tailrec suspend fun select(q: String, options: List<String>, default: String? = 
 	}
 
 	options.forEachIndexed { i, opt -> stream.write("$i) $opt") }
-	val answer = readLine(q, stream = stream)
+	val answer: String = readLine(q, stream = stream) ?: ""
 	default?.let { if(answer.isBlank()) return default }
 	return when(answer in options)
 	{
@@ -35,7 +35,7 @@ tailrec suspend fun <T> select(q: String, options: List<T>, default: T? = null, 
 	}
 
 	options.forEachIndexed { i, opt -> stream.write("$i) $opt") }
-	val answer = readLine(q, stream = stream)
+	val answer: String = readLine(q, stream = stream) ?: ""
 	default?.let { if(answer.isBlank()) return default }
 
 	if(answer.isInt())

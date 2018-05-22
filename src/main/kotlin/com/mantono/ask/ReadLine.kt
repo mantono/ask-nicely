@@ -10,11 +10,16 @@ val bold: AnsiCode = trueColor.bold
 val err: AnsiCode = trueColor.red
 val reset: AnsiCode = trueColor.reset
 
-suspend fun readLine(prompt: String, default: String? = null, stream: Duplex = SystemStream): String
+/**
+ * Write @param prompt to the given output in [Duplex] and @return a [String],
+ * either from the users input, or if the user input
+ */
+suspend fun readLine(prompt: String, default: String? = null, stream: Duplex = SystemStream): String?
 {
-	val def = default?.let { if(default.isNotBlank()) "$bold[$default]$reset" } ?: ""
+	val def: String = if(default.isNullOrBlank()) "" else "$bold[$default]$reset"
 	stream.write("$prompt$def:")
-	return stream.read()
+	val answer: String = stream.read()
+	return if(answer.isNotBlank()) answer else default
 }
 
 suspend inline fun <reified T> readLine(prompt: String, default: T? = null, stream: Duplex = SystemStream): T?
