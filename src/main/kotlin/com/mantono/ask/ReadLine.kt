@@ -11,8 +11,9 @@ val err: AnsiCode = trueColor.red
 val reset: AnsiCode = trueColor.reset
 
 /**
- * Write @param prompt to the given output in [Duplex] and @return a [String],
- * either from the users input, or if the user input
+ * Write @param prompt to the given output in [Duplex] of @param stream and @return a [String],
+ * either from the users input, or if the user input empty or blank, the @param default
+ * value will be returned, which may be null.
  */
 suspend fun readLine(prompt: String, default: String? = null, stream: Duplex = SystemStream): String?
 {
