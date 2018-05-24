@@ -104,7 +104,7 @@ tailrec suspend fun askBinary(q: String, default: Boolean? = null, stream: Duple
 			true -> default ?: askBinary(q, stream = stream)
 			false ->
 			{
-				stream.write(err("Please answer yes/y or no/n"))
+				stream.write(err("Please answer yes/y or no/n\n"))
 				askBinary(q, default, stream)
 			}
 		}
