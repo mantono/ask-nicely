@@ -61,3 +61,17 @@ suspend inline fun <reified T> readLine(prompt: String, default: T? = null, stre
 		null
 	}
 }
+
+/**
+ * This function is an even more generic version of readLine, that can parse any type of
+ * data that can be converted from a String. It does however require an extra argument, a parsing function
+ * @param parse that can parse the String input into the given type [T].
+ */
+suspend inline fun <T> readLine(prompt: String, default: T? = null, stream: Duplex = SystemStream, parse: (String) -> T?): T?
+{
+	val def = default?.let { "[$default]" } ?: ""
+	stream.write("$prompt$def:")
+	val answer: String = stream.read()
+	val parsedInput: T? = parse(answer)
+	return parsedInput ?: default
+}
