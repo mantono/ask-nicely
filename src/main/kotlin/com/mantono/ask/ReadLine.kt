@@ -13,7 +13,10 @@ val reset: AnsiCode = trueColor.reset
 /**
  * Write @param prompt to the given output in [Duplex] of @param stream and @return a [String],
  * either from the users input, or if the user input empty or blank, the @param default
- * value will be returned, which may be null.
+ * value will be returned, which may be null. The readLine function is only responsible for
+ * presenting the user with a prompt (output) and and reading the user's answer (input). It
+ * does not apply any retry logic if the result is null or the user provide an empty input.
+ * For that sort of functionality should [readLine] be used.
  */
 suspend fun readLine(prompt: String, default: String? = null, stream: Duplex = SystemStream): String?
 {
@@ -23,6 +26,11 @@ suspend fun readLine(prompt: String, default: String? = null, stream: Duplex = S
 	return if(answer.isNotBlank()) answer else default
 }
 
+/**
+ * A more generic version of readLine than the String version of [readLine].
+ *  This function can take any primitive type, and also [BigInteger] and [BigDecimal]
+ *  and parse the use input as such.
+ */
 suspend inline fun <reified T> readLine(prompt: String, default: T? = null, stream: Duplex = SystemStream): T?
 {
 	val def = default?.let { "[$default]" } ?: ""
