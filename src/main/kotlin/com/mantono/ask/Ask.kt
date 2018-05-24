@@ -31,6 +31,14 @@ suspend inline fun <reified T: Comparable<T>> ask(q: String, range: ClosedRange<
 	}
 }
 
+suspend inline fun <reified T> ask(q: String, default: T? = null, stream: Duplex = SystemStream, parse: (String) -> T?): T
+{
+	while(true)
+	{
+		readLine(q, default, stream, parse)?.let { return it }
+	}
+}
+
 /**
  * Ask a user for a String input. Unlike [readLine], this function can never return
  * null because this function will not return until it has received a non-null

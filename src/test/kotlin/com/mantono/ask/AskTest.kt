@@ -1,8 +1,8 @@
 package com.mantono.ask
 
-import kotlinx.coroutines.experimental.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.time.Instant
 import java.util.*
 
 fun fakeInput(vararg input: String): Duplex
@@ -21,7 +21,7 @@ class AskTest
 	@Test
 	fun testAskWithCorrectInputAtFirstInput()
 	{
-		runBlocking {
+		testBlocking {
 			val input = fakeInput("42")
 			val number: Int = ask<Int>("Enter a digit", null, input)
 			assertEquals(42, number)
@@ -31,7 +31,7 @@ class AskTest
 	@Test
 	fun testAskWithCorrectInputAtSecondInput()
 	{
-		runBlocking {
+		testBlocking {
 			val input = fakeInput("Not a number", "42")
 			val number: Int = ask<Int>("Enter a digit", null, input)
 			assertEquals(42, number)
@@ -41,7 +41,7 @@ class AskTest
 	@Test
 	fun testAskWithDefaultValueAsResponse()
 	{
-		runBlocking {
+		testBlocking {
 			val input = fakeInput(" ")
 			val number: Int = ask<Int>("Enter a digit", 42, input)
 			assertEquals(42, number)
@@ -51,10 +51,22 @@ class AskTest
 	@Test
 	fun testAskWithDefaultValueAsResponseOnSecondInput()
 	{
-		runBlocking {
+		testBlocking {
 			val input = fakeInput("Not a number", " ")
 			val number: Int = ask<Int>("Enter a digit", 42, input)
 			assertEquals(42, number)
+		}
+	}
+
+	@Test
+	fun testAskWithParseFunction()
+	{
+		testBlocking {
+			val input = fakeInput("1527199361")
+			val timestamp: Instant = ask<Instant>("What time is it?", stream = input) { userInput ->
+				Instant.ofEpochSecond(userInput.toLong())
+			}
+			assertEquals(1527199361L, timestamp.epochSecond)
 		}
 	}
 }

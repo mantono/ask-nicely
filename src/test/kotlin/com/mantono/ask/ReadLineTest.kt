@@ -1,6 +1,5 @@
 package com.mantono.ask
 
-import kotlinx.coroutines.experimental.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
@@ -15,7 +14,7 @@ class ReadLineTest
 	@Test
 	fun readDouble()
 	{
-		val value: Double? = runBlocking {
+		val value: Double? = testBlocking {
 			readLine<Double>("Enter your weight", stream = fakeInput("82.0"))
 		}
 
@@ -25,7 +24,7 @@ class ReadLineTest
 	@Test
 	fun readBoolean()
 	{
-		val value: Boolean? = runBlocking {
+		val value: Boolean? = testBlocking {
 			readLine<Boolean>("Are you happy", stream = fakeInput("false"))
 		}
 
@@ -35,7 +34,7 @@ class ReadLineTest
 	@Test
 	fun readBigInteger()
 	{
-		val value: BigInteger? = runBlocking {
+		val value: BigInteger? = testBlocking {
 			readLine<BigInteger>(
 					"How long is a rope",
 					stream = fakeInput("1213809190381571092802108383190741028921071209389839064")
@@ -48,7 +47,7 @@ class ReadLineTest
 	@Test
 	fun readBigDecimal()
 	{
-		val value: BigDecimal? = runBlocking {
+		val value: BigDecimal? = testBlocking {
 			readLine<BigDecimal>("", stream = fakeInput("0.1"))
 		}
 
@@ -59,7 +58,7 @@ class ReadLineTest
 	fun testUnsupportedClass()
 	{
 		assertThrows<IllegalArgumentException> {
-			runBlocking {
+			testBlocking {
 				readLine<Instant>("Enter a date", stream = fakeInput("100"))
 			}
 		}
@@ -68,7 +67,7 @@ class ReadLineTest
 	@Test
 	fun testBadNumberInputReturnsNull()
 	{
-		runBlocking {
+		testBlocking {
 			assertNull(readLine<Long>("How old is the universe", stream = fakeInput("8.9")))
 		}
 	}
@@ -77,7 +76,7 @@ class ReadLineTest
 	fun testReifiedReadLineLongWithTrailingL()
 	{
 		val input = fakeInput("10L")
-		val output: Long = runBlocking { readLine<Long>("", stream = input)!! }
+		val output: Long = testBlocking { readLine<Long>("", stream = input)!! }
 		assertEquals(10L, output)
 	}
 
@@ -85,7 +84,7 @@ class ReadLineTest
 	fun testReifiedReadLineLongWithoutTrailingL()
 	{
 		val input = fakeInput("10")
-		val output: Long = runBlocking { readLine<Long>("", stream = input)!! }
+		val output: Long = testBlocking { readLine<Long>("", stream = input)!! }
 		assertEquals(10L, output)
 	}
 
@@ -93,7 +92,7 @@ class ReadLineTest
 	fun testReifiedReadLineFloatWithTrailingFAndNoDecimalPoint()
 	{
 		val input = fakeInput("10f")
-		val output: Float = runBlocking { readLine<Float>("", stream = input)!! }
+		val output: Float = testBlocking { readLine<Float>("", stream = input)!! }
 		assertEquals(10f, output)
 	}
 
@@ -101,7 +100,7 @@ class ReadLineTest
 	fun testReifiedReadLineFloatWithTrailingFAndDecimalPoint()
 	{
 		val input = fakeInput("10.0f")
-		val output: Float = runBlocking { readLine<Float>("", stream = input)!! }
+		val output: Float = testBlocking { readLine<Float>("", stream = input)!! }
 		assertEquals(10f, output)
 	}
 
@@ -109,7 +108,7 @@ class ReadLineTest
 	fun testReifiedReadLineFloatWithoutTrailingFAndNoDecimalPoint()
 	{
 		val input = fakeInput("10")
-		val output: Float = runBlocking { readLine<Float>("", stream = input)!! }
+		val output: Float = testBlocking { readLine<Float>("", stream = input)!! }
 		assertEquals(10f, output)
 	}
 
@@ -117,7 +116,7 @@ class ReadLineTest
 	fun testReifiedReadLineFloatWithoutTrailingFAndDecimalPoint()
 	{
 		val input = fakeInput("10.0")
-		val output: Float = runBlocking { readLine<Float>("", stream = input)!! }
+		val output: Float = testBlocking { readLine<Float>("", stream = input)!! }
 		assertEquals(10f, output)
 	}
 }
