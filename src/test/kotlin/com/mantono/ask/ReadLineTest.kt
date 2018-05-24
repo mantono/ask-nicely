@@ -72,4 +72,52 @@ class ReadLineTest
 			assertNull(readLine<Long>("How old is the universe", stream = fakeInput("8.9")))
 		}
 	}
+
+	@Test
+	fun testReifiedReadLineLongWithTrailingL()
+	{
+		val input = fakeInput("10L")
+		val output: Long = runBlocking { readLine<Long>("", stream = input)!! }
+		assertEquals(10L, output)
+	}
+
+	@Test
+	fun testReifiedReadLineLongWithoutTrailingL()
+	{
+		val input = fakeInput("10")
+		val output: Long = runBlocking { readLine<Long>("", stream = input)!! }
+		assertEquals(10L, output)
+	}
+
+	@Test
+	fun testReifiedReadLineFloatWithTrailingFAndNoDecimalPoint()
+	{
+		val input = fakeInput("10f")
+		val output: Float = runBlocking { readLine<Float>("", stream = input)!! }
+		assertEquals(10f, output)
+	}
+
+	@Test
+	fun testReifiedReadLineFloatWithTrailingFAndDecimalPoint()
+	{
+		val input = fakeInput("10.0f")
+		val output: Float = runBlocking { readLine<Float>("", stream = input)!! }
+		assertEquals(10f, output)
+	}
+
+	@Test
+	fun testReifiedReadLineFloatWithoutTrailingFAndNoDecimalPoint()
+	{
+		val input = fakeInput("10")
+		val output: Float = runBlocking { readLine<Float>("", stream = input)!! }
+		assertEquals(10f, output)
+	}
+
+	@Test
+	fun testReifiedReadLineFloatWithoutTrailingFAndDecimalPoint()
+	{
+		val input = fakeInput("10.0")
+		val output: Float = runBlocking { readLine<Float>("", stream = input)!! }
+		assertEquals(10f, output)
+	}
 }

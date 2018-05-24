@@ -19,50 +19,42 @@ fun fakeInput(vararg input: String): Duplex
 class AskTest
 {
 	@Test
-	fun testReifiedReadLineLongWithTrailingL()
+	fun testAskWithCorrectInputAtFirstInput()
 	{
-		val input = fakeInput("10L")
-		val output: Long = runBlocking { readLine<Long>("", stream = input)!! }
-		assertEquals(10L, output)
+		runBlocking {
+			val input = fakeInput("42")
+			val number: Int = ask<Int>("Enter a digit", null, input)
+			assertEquals(42, number)
+		}
 	}
 
 	@Test
-	fun testReifiedReadLineLongWithoutTrailingL()
+	fun testAskWithCorrectInputAtSecondInput()
 	{
-		val input = fakeInput("10")
-		val output: Long = runBlocking { readLine<Long>("", stream = input)!! }
-		assertEquals(10L, output)
+		runBlocking {
+			val input = fakeInput("Not a number", "42")
+			val number: Int = ask<Int>("Enter a digit", null, input)
+			assertEquals(42, number)
+		}
 	}
 
 	@Test
-	fun testReifiedReadLineFloatWithTrailingFAndNoDecimalPoint()
+	fun testAskWithDefaultValueAsResponse()
 	{
-		val input = fakeInput("10f")
-		val output: Float = runBlocking { readLine<Float>("", stream = input)!! }
-		assertEquals(10f, output)
+		runBlocking {
+			val input = fakeInput(" ")
+			val number: Int = ask<Int>("Enter a digit", 42, input)
+			assertEquals(42, number)
+		}
 	}
 
 	@Test
-	fun testReifiedReadLineFloatWithTrailingFAndDecimalPoint()
+	fun testAskWithDefaultValueAsResponseOnSecondInput()
 	{
-		val input = fakeInput("10.0f")
-		val output: Float = runBlocking { readLine<Float>("", stream = input)!! }
-		assertEquals(10f, output)
-	}
-
-	@Test
-	fun testReifiedReadLineFloatWithoutTrailingFAndNoDecimalPoint()
-	{
-		val input = fakeInput("10")
-		val output: Float = runBlocking { readLine<Float>("", stream = input)!! }
-		assertEquals(10f, output)
-	}
-
-	@Test
-	fun testReifiedReadLineFloatWithoutTrailingFAndDecimalPoint()
-	{
-		val input = fakeInput("10.0")
-		val output: Float = runBlocking { readLine<Float>("", stream = input)!! }
-		assertEquals(10f, output)
+		runBlocking {
+			val input = fakeInput("Not a number", " ")
+			val number: Int = ask<Int>("Enter a digit", 42, input)
+			assertEquals(42, number)
+		}
 	}
 }
