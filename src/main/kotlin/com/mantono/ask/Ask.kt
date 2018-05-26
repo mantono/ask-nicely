@@ -4,12 +4,12 @@ package com.mantono.ask
  * Ask a user for input. Unlike [readLine], this function can never return
  * null because this function will not return until it has received a non-null
  * response.
- * @param q gives the user a prompt for the input
- * @param default is a default value (of type [T]) that is returned if the user enters no
+ *
+ * @param q prompt that is presented for the user when asking for input
+ * @param default is a default value (of type T) that is returned if the user enters no
  * input or only a blank input (only spaces).
  * @param stream is a [Duplex], representing a means of input and output for
- * communicating with the user. This Duplex is mostly represented by some form
- * of [InputStream] and [OutputStream]. The default value is a [SystemStream].
+ * communicating with the user
  * @return a value, which is either the default value or the user's response
  */
 suspend inline fun <reified T> ask(q: String, default: T? = null, stream: Duplex = SystemStream): T
@@ -20,6 +20,16 @@ suspend inline fun <reified T> ask(q: String, default: T? = null, stream: Duplex
 	}
 }
 
+/**
+ * Ask a user for input, requring any response to be within a given [ClosedRange] as specified by _range_.
+ *
+ * @param q prompt that is presented for the user when asking for input
+ * @param range a [ClosedRange] of type T, setting a bound for the users input
+ * @param default is a default value (of type T) that is returned if the user enters no
+ * input or only a blank input (only spaces).
+ * @param stream is a [Duplex], representing a means of input and output for
+ * communicating with the user
+ */
 suspend inline fun <reified T: Comparable<T>> ask(q: String, range: ClosedRange<T>, default: T? = null, stream: Duplex = SystemStream): T
 {
 	default?.let {
@@ -31,6 +41,13 @@ suspend inline fun <reified T: Comparable<T>> ask(q: String, range: ClosedRange<
 	}
 }
 
+/**
+ * @param q prompt that is presented for the user when asking for input
+ * @param default is a default value (of type T) that is returned if the user enters no
+ * input or only a blank input (only spaces).
+ * @param stream is a [Duplex], representing a means of input and output for
+ * communicating with the user
+ */
 suspend inline fun <reified T> ask(q: String, default: T? = null, stream: Duplex = SystemStream, parse: (String) -> T?): T
 {
 	while(true)
@@ -43,10 +60,12 @@ suspend inline fun <reified T> ask(q: String, default: T? = null, stream: Duplex
  * Ask a user for a String input. Unlike [readLine], this function can never return
  * null because this function will not return until it has received a non-null
  * response.
- * @param q gives the user a prompt for the input
+ *
+ * @param q prompt that is presented for the user when asking for input
  * @param default is a default value that is returned if the user enters no
  * input or only a blank input (only spaces).
- * @param stream is a [Duplex] for communicating with the user
+ * @param stream is a [Duplex], representing a means of input and output for
+ * communicating with the user
  * @return a value, which is either the default value or the user's response
  */
 tailrec suspend fun ask(q: String, default: String? = null, stream: Duplex = SystemStream): String
@@ -68,11 +87,13 @@ tailrec suspend fun ask(q: String, default: String? = null, stream: Duplex = Sys
  * Ask a user for input that matches a [Regex]. Unlike [readLine], this function can never return
  * null because this function will not return until it has received a non-null
  * response.
- * @param q gives the user a prompt for the input
- * @param regex, a regular expression which the user's input must match. If it does not match
- * @param default is a default value (of type [T]) that is returned if the user enters no
+ *
+ * @param q prompt that is presented for the user when asking for input
+ * @param regex [Regex] a regular expression which the user's input must match
+ * @param default [String] is a default value that is returned if the user enters no
  * input or only a blank input (only spaces).
- * @param stream is a [Duplex] for communicating with the user
+ * @param stream is a [Duplex], representing a means of input and output for
+ * communicating with the user
  * @return a value, which is either the default value or the user's response
  */
 tailrec suspend fun ask(q: String, regex: Regex, default: String? = null, stream: Duplex = SystemStream): String
@@ -94,10 +115,12 @@ tailrec suspend fun ask(q: String, regex: Regex, default: String? = null, stream
  * Unlike [readLine], this function can never return
  * null because this function will not return until it has received a non-null
  * response.
- * @param q gives the user a prompt for the input
- * @param default is a default value that is returned if the user enters no
- * input or only a blank input (only spaces).
- * @param stream is a [Duplex] for communicating with the user
+ *
+ * @param q prompt that is presented for the user when asking for input
+ * @param default [Boolean] is a default value that is returned if the user enters no
+ * input or only a blank input (only spaces), which is either `true` or `false`
+ * @param stream is a [Duplex], representing a means of input and output for
+ * communicating with the user
  * @return a value, which is either the default value or the user's response
  */
 tailrec suspend fun askBinary(q: String, default: Boolean? = null, stream: Duplex = SystemStream): Boolean

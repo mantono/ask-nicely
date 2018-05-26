@@ -72,6 +72,14 @@ suspend inline fun <T> readLine(prompt: String, default: T? = null, stream: Dupl
 	val def = default?.let { "[$default]" } ?: ""
 	stream.write("$prompt$def:")
 	val answer: String = stream.read()
-	val parsedInput: T? = parse(answer)
-	return parsedInput ?: default
+	return try
+	{
+		val parsedInput: T? = parse(answer)
+		parsedInput ?: default
+	}
+	catch(e: Exception)
+	{
+		stream.write(err("$e\n"))
+		null
+	}
 }

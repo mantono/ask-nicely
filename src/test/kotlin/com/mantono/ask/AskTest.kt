@@ -69,4 +69,16 @@ class AskTest
 			assertEquals(1527199361L, timestamp.epochSecond)
 		}
 	}
+
+	@Test
+	fun testAskWithParseFunctionAndWrongInputOnFirstAttempt()
+	{
+		testBlocking {
+			val input = fakeInput("q", "1527199361")
+			val timestamp: Instant = ask<Instant>("What time is it?", stream = input) { userInput ->
+				Instant.ofEpochSecond(userInput.toLong())
+			}
+			assertEquals(1527199361L, timestamp.epochSecond)
+		}
+	}
 }
