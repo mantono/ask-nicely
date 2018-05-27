@@ -2,6 +2,8 @@ package com.mantono.ask
 
 tailrec suspend fun select(q: String, options: List<String>, default: String? = null, stream: Duplex = SystemStream): String
 {
+	require(options.isNotEmpty()) { "Argument options cannot be empty" }
+
 	default?.let {
 		if(it !in options)
 			throw IllegalArgumentException("Default argument '$default' is not among the available options $options")
@@ -29,6 +31,8 @@ tailrec suspend fun select(q: String, options: List<String>, default: String? = 
 
 tailrec suspend fun <T> select(q: String, options: List<T>, default: T? = null, stream: Duplex = SystemStream): T
 {
+	require(options.isNotEmpty()) { "Argument options cannot be empty" }
+	
 	default?.let {
 		if(it !in options)
 			throw IllegalArgumentException("Default argument '$default' is not among the available options $options")
