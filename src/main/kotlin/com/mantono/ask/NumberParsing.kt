@@ -1,15 +1,15 @@
 package com.mantono.ask
 
-val intRegex = Regex("^\\d+\$")
+private val intRegex = Regex("^\\d+\$")
 fun String.isInt(): Boolean = intRegex.matches(this)
 
-val longRegex = Regex("^\\d+L?\$")
+private val longRegex = Regex("^\\d+L?\$")
 fun String.isLong(): Boolean = longRegex.matches(this)
 
-val floatRegex = Regex("^\\d+(\\.?\\d*)f\$")
+private val floatRegex = Regex("^\\d+(\\.?\\d*)f\$")
 fun String.isFloat(): Boolean = floatRegex.matches(this)
 
-val doubleRegex = Regex("^\\d+(\\.?\\d*)\$")
+private val doubleRegex = Regex("^\\d+(\\.?\\d*)\$")
 fun String.isDouble(): Boolean = doubleRegex.matches(this)
 
 fun String.isByte(): Boolean
@@ -23,3 +23,5 @@ fun String.isShort(): Boolean
 	if(!isInt()) return false
 	return toInt() in Short.MIN_VALUE .. Short.MAX_VALUE
 }
+
+fun CharSequence?.isNotNullOrBlank(): Boolean = this != null && this.isNotBlank()

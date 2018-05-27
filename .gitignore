@@ -6,3 +6,7 @@
 gradle
 gradlew*
 build
+.idea/
+ask-nicely.iml
+out/
+Main.kt

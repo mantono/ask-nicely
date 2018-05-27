@@ -6,6 +6,14 @@ import java.io.InputStream
 import java.io.OutputStream
 import java.util.*
 
+/**
+ * Interface Duplex is an abstraction for reading user input and output,
+ * mostly represented by some form of [java.io.InputStream] and [java.io.OutputStream]
+ * like [System.in] and [System.out]. However, any means
+ * of reading and writing strings can be used, so writing test cases can
+ * be done without relying on the [java.io.PrintStream] in [System] when executing
+ * test cases.
+ */
 interface Duplex: Closeable
 {
 	suspend fun read(): String
@@ -32,6 +40,9 @@ class DuplexStream(private val input: InputStream, private val output: OutputStr
 	}
 }
 
+/**
+ * A DuplexStream, communicating with [System.in] and [System.out].
+ */
 object SystemStream: Duplex by DuplexStream(System.`in`, System.out)
 {
 	override fun close() { }

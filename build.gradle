@@ -7,28 +7,28 @@ group = 'com.mantono'
 version = '1.0-SNAPSHOT'
 description = 'Library for easier providing an interactive command line interface'
 
-defaultTasks 'run'
-
-task run(type: JavaExec) {
-    main = 'com.mantono.ask.MainKt' //Important that 'Kt' is appended to class name
-    classpath = sourceSets.main.runtimeClasspath
-}
+defaultTasks 'test'
 
 buildscript {
     ext.kotlin_version = '1.2.41'
     ext.kotlin_api_version = '1.2'
     ext.jvm_version = '1.8'
     ext.junit_platform_version = '1.1.0'
+    ext.dokka_version = '0.9.17'
     repositories {
+        jcenter()
         mavenCentral()
         maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.junit.platform:junit-platform-gradle-plugin:$junit_platform_version"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:${dokka_version}"
     }
 }
 
+
+apply plugin: 'org.jetbrains.dokka'
 apply plugin: "org.junit.platform.gradle.plugin"
 
 dependencies {
@@ -111,6 +111,59 @@ task wrapper(type: Wrapper) {
     gradleVersion = '4.7'
 }
 
-run {
-    standardInput = System.in
+dokka {
+    moduleName = 'data'
+    outputFormat = 'html'
+    outputDirectory = "$buildDir/javadoc"
+
+    // List of files with module and package documentation
+    // http://kotlinlang.org/docs/reference/kotlin-doc.html#module-and-package-documentation
+    includes = ['packages.md', 'extra.md']
+
+    jdkVersion = 8 // Used for linking to JDK
+
+    // Use to include or exclude non public members.
+    includeNonPublic = false
+
+    // Do not output deprecated members. Applies globally, can be overridden by packageOptions
+    skipDeprecated = false
+
+    // Emit warnings about not documented members. Applies globally, also can be overridden by packageOptions
+    reportUndocumented = true
+
+    skipEmptyPackages = true // Do not create index pages for empty packages
+
+    impliedPlatforms = ["JVM"] // See platforms section of documentation
+
+    // Specifies the location of the project source code on the Web.
+    // If provided, Dokka generates "source" links for each declaration.
+    // Repeat for multiple mappings
+    linkMapping {
+        // Source directory
+        dir = "src/main/kotlin"
+
+        // URL showing where the source code can be accessed through the web browser
+        url = "https://github.com/mantono/ask-nicely/blob/master/src/main/kotlin"
+
+        // Suffix which is used to append the line number to the URL. Use #L for GitHub
+        suffix = "#L"
+    }
+
+    // No default documentation link to kotlin-stdlib
+    noStdlibLink = false
+
+    // Allows to customize documentation generation options on a per-package basis
+    // Repeat for multiple packageOptions
+    packageOptions {
+        prefix = "kotlin" // will match kotlin and all sub-packages of it
+        // All options are optional, default values are below:
+        skipDeprecated = false
+        reportUndocumented = true // Emit warnings about not documented members
+        includeNonPublic = false
+    }
+    // Suppress a package
+    packageOptions {
+        prefix = "kotlin.internal" // will match kotlin.internal and all sub-packages of it
+        suppress = true
+    }
 }

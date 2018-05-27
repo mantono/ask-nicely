@@ -1,8 +1,8 @@
 package com.mantono.ask
 
-import kotlinx.coroutines.experimental.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.time.Instant
 import java.util.*
 
 fun fakeInput(vararg input: String): Duplex
@@ -19,50 +19,66 @@ fun fakeInput(vararg input: String): Duplex
 class AskTest
 {
 	@Test
-	fun testReifiedReadLineLongWithTrailingL()
+	fun testAskWithCorrectInputAtFirstInput()
 	{
-		val input = fakeInput("10L")
-		val output: Long = runBlocking { readLine<Long>("", stream = input)!! }
-		assertEquals(10L, output)
+		testBlocking {
+			val input = fakeInput("42")
+			val number: Int = ask<Int>("Enter a digit", null, input)
+			assertEquals(42, number)
+		}
 	}
 
 	@Test
-	fun testReifiedReadLineLongWithoutTrailingL()
+	fun testAskWithCorrectInputAtSecondInput()
 	{
-		val input = fakeInput("10")
-		val output: Long = runBlocking { readLine<Long>("", stream = input)!! }
-		assertEquals(10L, output)
+		testBlocking {
+			val input = fakeInput("Not a number", "42")
+			val number: Int = ask<Int>("Enter a digit", null, input)
+			assertEquals(42, number)
+		}
 	}
 
 	@Test
-	fun testReifiedReadLineFloatWithTrailingFAndNoDecimalPoint()
+	fun testAskWithDefaultValueAsResponse()
 	{
-		val input = fakeInput("10f")
-		val output: Float = runBlocking { readLine<Float>("", stream = input)!! }
-		assertEquals(10f, output)
+		testBlocking {
+			val input = fakeInput(" ")
+			val number: Int = ask<Int>("Enter a digit", 42, input)
+			assertEquals(42, number)
+		}
 	}
 
 	@Test
-	fun testReifiedReadLineFloatWithTrailingFAndDecimalPoint()
+	fun testAskWithDefaultValueAsResponseOnSecondInput()
 	{
-		val input = fakeInput("10.0f")
-		val output: Float = runBlocking { readLine<Float>("", stream = input)!! }
-		assertEquals(10f, output)
+		testBlocking {
+			val input = fakeInput("Not a number", " ")
+			val number: Int = ask<Int>("Enter a digit", 42, input)
+			assertEquals(42, number)
+		}
 	}
 
 	@Test
-	fun testReifiedReadLineFloatWithoutTrailingFAndNoDecimalPoint()
+	fun testAskWithParseFunction()
 	{
-		val input = fakeInput("10")
-		val output: Float = runBlocking { readLine<Float>("", stream = input)!! }
-		assertEquals(10f, output)
+		testBlocking {
+			val input = fakeInput("1527199361")
+			val timestamp: Instant = ask<Instant>("What time is it?", stream = input) { userInput ->
+				Instant.ofEpochSecond(userInput.toLong())
+			}
+			assertEquals(1527199361L, timestamp.epochSecond)
+		}
 	}
 
 	@Test
-	fun testReifiedReadLineFloatWithoutTrailingFAndDecimalPoint()
+	fun testAskWithParseFunctionAndWrongInputOnFirstAttempt()
 	{
-		val input = fakeInput("10.0")
-		val output: Float = runBlocking { readLine<Float>("", stream = input)!! }
-		assertEquals(10f, output)
+		testBlocking {
+			val input = fakeInput("q", "1527199361")
+			val timestamp: Instant = ask<Instant>("What time is it?", stream = input) { userInput ->
+				Instant.ofEpochSecond(userInput.toLong())
+			}
+			assertEquals(1527199361L, timestamp.epochSecond)
+		}
 	}
 }
