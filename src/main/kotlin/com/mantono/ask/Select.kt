@@ -9,7 +9,7 @@ tailrec suspend fun select(q: String, options: List<String>, default: String? = 
 			throw IllegalArgumentException("Default argument '$default' is not among the available options $options")
 	}
 
-	options.forEachIndexed { i, opt -> stream.write("$i) $opt") }
+	options.forEachIndexed { i, opt -> stream.write("$i) $opt\n") }
 	val answer: String = readLine(q, stream = stream) ?: ""
 	default?.let { if(answer.isBlank()) return default }
 	return when(answer in options)
@@ -38,7 +38,7 @@ tailrec suspend fun <T> select(q: String, options: List<T>, default: T? = null, 
 			throw IllegalArgumentException("Default argument '$default' is not among the available options $options")
 	}
 
-	options.forEachIndexed { i, opt -> stream.write("$i) $opt") }
+	options.forEachIndexed { i, opt -> stream.write("$i) $opt\n") }
 	val answer: String = readLine(q, stream = stream) ?: ""
 	default?.let { if(answer.isBlank()) return default }
 
