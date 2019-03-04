@@ -15,7 +15,7 @@ This is an example of what is required to print some output, read the user input
 validate it and parse the input as a `Double` in Kotlin.
 
 ```
-fun readWeight(): Double
+fun readWeight(): Double?
 {
     System.out.println("What is your weight: ")
     val input: String = Scanner(System.`in`).nextLine()
