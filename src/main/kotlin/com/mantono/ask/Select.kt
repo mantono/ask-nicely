@@ -24,7 +24,12 @@ fun select(
 				if(i in options.indices)
 					return options[i]
 			}
-			stream.write(err("'$answer' is not a valid option"))
+			val errorMessage: String = if(answer.isBlank()) {
+				"Input was blank\n"
+			} else {
+				"'$answer' is not a valid option\n"
+			}
+			stream.write(err(errorMessage))
 			select(q, options, default, stream)
 		}
 	}
@@ -52,7 +57,12 @@ tailrec fun <T> select(
 		if(i in options.indices)
 			return options[i]
 	}
-	stream.write(err("'$answer' is not a valid option"))
+	val errorMessage: String = if(answer.isBlank()) {
+		"Input was blank\n"
+	} else {
+		"'$answer' is not a valid option\n"
+	}
+	stream.write(err(errorMessage))
 	return select(q, options, default, stream)
 }
 
