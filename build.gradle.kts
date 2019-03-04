@@ -35,7 +35,7 @@ repositories {
 
 dependencies {
 	implementation("org.jetbrains.kotlin", "kotlin-stdlib-jdk8", Version.KOTLIN)
-	implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-jdk8", Version.COROUTINES)
+	implementation("org.jetbrains.kotlin:kotlin-reflect:${Version.KOTLIN}")
 	implementation("com.github.ajalt.mordant:mordant:1.0.1")
 
 	// Junit
@@ -55,6 +55,10 @@ tasks {
 			junitXml.isEnabled = false
 			html.isEnabled = true
 		}
+	}
+
+	withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+		kotlinOptions.jvmTarget = "1.8"
 	}
 
 	compileKotlin {

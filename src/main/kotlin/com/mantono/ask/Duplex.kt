@@ -1,6 +1,5 @@
 package com.mantono.ask
 
-import kotlinx.coroutines.experimental.async
 import java.io.Closeable
 import java.io.InputStream
 import java.io.OutputStream
@@ -16,21 +15,19 @@ import java.util.*
  */
 interface Duplex: Closeable
 {
-	suspend fun read(): String
-	suspend fun write(data: String): Int
+	fun read(): String
+	fun write(data: String): Int
 }
 
 class DuplexStream(private val input: InputStream, private val output: OutputStream): Duplex
 {
-	override suspend fun read(): String = async { Scanner(input).nextLine() }.await()
+	override fun read(): String = Scanner(input).nextLine()
 
-	override suspend fun write(data: String): Int
+	override fun write(data: String): Int
 	{
-		return async {
-			val bytes = data.toByteArray()
-			output.write(bytes)
-			bytes.size
-		}.await()
+		val bytes = data.toByteArray()
+		output.write(bytes)
+		return bytes.size
 	}
 
 	override fun close()

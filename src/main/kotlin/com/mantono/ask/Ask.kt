@@ -12,7 +12,7 @@ package com.mantono.ask
  * communicating with the user
  * @return a value, which is either the default value or the user's response
  */
-suspend inline fun <reified T> ask(q: String, default: T? = null, stream: Duplex = SystemStream): T
+inline fun <reified T> ask(q: String, default: T? = null, stream: Duplex = SystemStream): T
 {
 	while(true)
 	{
@@ -30,7 +30,7 @@ suspend inline fun <reified T> ask(q: String, default: T? = null, stream: Duplex
  * @param stream is a [Duplex], representing a means of input and output for
  * communicating with the user
  */
-suspend inline fun <reified T: Comparable<T>> ask(q: String, range: ClosedRange<T>, default: T? = null, stream: Duplex = SystemStream): T
+inline fun <reified T: Comparable<T>> ask(q: String, range: ClosedRange<T>, default: T? = null, stream: Duplex = SystemStream): T
 {
 	default?.let {
 		require(it in range) { "Default argument $default is outside range $range" }
@@ -48,7 +48,7 @@ suspend inline fun <reified T: Comparable<T>> ask(q: String, range: ClosedRange<
  * @param stream is a [Duplex], representing a means of input and output for
  * communicating with the user
  */
-suspend inline fun <reified T> ask(q: String, default: T? = null, stream: Duplex = SystemStream, parse: (String) -> T?): T
+inline fun <reified T> ask(q: String, default: T? = null, stream: Duplex = SystemStream, parse: (String) -> T?): T
 {
 	while(true)
 	{
@@ -68,7 +68,7 @@ suspend inline fun <reified T> ask(q: String, default: T? = null, stream: Duplex
  * communicating with the user
  * @return a value, which is either the default value or the user's response
  */
-tailrec suspend fun ask(q: String, default: String? = null, stream: Duplex = SystemStream): String
+tailrec fun ask(q: String, default: String? = null, stream: Duplex = SystemStream): String
 {
 	val response: String = readLine(q, default, stream = stream) ?: ""
 
@@ -96,7 +96,7 @@ tailrec suspend fun ask(q: String, default: String? = null, stream: Duplex = Sys
  * communicating with the user
  * @return a value, which is either the default value or the user's response
  */
-tailrec suspend fun ask(q: String, regex: Regex, default: String? = null, stream: Duplex = SystemStream): String
+tailrec fun ask(q: String, regex: Regex, default: String? = null, stream: Duplex = SystemStream): String
 {
 	val response: String = readLine(q, default, stream) ?: ""
 	return when(response.matches(regex))
@@ -123,7 +123,7 @@ tailrec suspend fun ask(q: String, regex: Regex, default: String? = null, stream
  * communicating with the user
  * @return a value, which is either the default value or the user's response
  */
-tailrec suspend fun askBinary(q: String, default: Boolean? = null, stream: Duplex = SystemStream): Boolean
+tailrec fun askBinary(q: String, default: Boolean? = null, stream: Duplex = SystemStream): Boolean
 {
 	val response: String = readLine(q, default?.yesOrNo(), stream)?.toLowerCase() ?: ""
 	return when(response)

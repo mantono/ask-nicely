@@ -18,7 +18,7 @@ val reset: AnsiCode = trueColor.reset
  * does not apply any retry logic if the result is null or the user provide an empty input.
  * For that sort of functionality should [readLine] be used.
  */
-suspend fun readLine(prompt: String, default: String? = null, stream: Duplex = SystemStream): String?
+fun readLine(prompt: String, default: String? = null, stream: Duplex = SystemStream): String?
 {
 	val def: String = if(default.isNullOrBlank()) "" else "$bold[$default]$reset"
 	stream.write("$prompt$def:")
@@ -31,7 +31,7 @@ suspend fun readLine(prompt: String, default: String? = null, stream: Duplex = S
  *  This function can take any primitive type, and also [BigInteger] and [BigDecimal]
  *  and parse the use input as such.
  */
-suspend inline fun <reified T> readLine(prompt: String, default: T? = null, stream: Duplex = SystemStream): T?
+inline fun <reified T> readLine(prompt: String, default: T? = null, stream: Duplex = SystemStream): T?
 {
 	val def = default?.let { "[$default]" } ?: ""
 	stream.write("$prompt$def:")
@@ -67,7 +67,7 @@ suspend inline fun <reified T> readLine(prompt: String, default: T? = null, stre
  * data that can be converted from a String. It does however require an extra argument, a parsing function
  * @param parse that can parse the String input into the given type [T].
  */
-suspend inline fun <T> readLine(prompt: String, default: T? = null, stream: Duplex = SystemStream, parse: (String) -> T?): T?
+inline fun <T> readLine(prompt: String, default: T? = null, stream: Duplex = SystemStream, parse: (String) -> T?): T?
 {
 	val def = default?.let { "[$default]" } ?: ""
 	stream.write("$prompt$def:")

@@ -1,6 +1,6 @@
 package com.mantono.ask
 
-tailrec suspend fun select(q: String, options: List<String>, default: String? = null, stream: Duplex = SystemStream): String
+fun select(q: String, options: List<String>, default: String? = null, stream: Duplex = SystemStream): String
 {
 	require(options.isNotEmpty()) { "Argument options cannot be empty" }
 
@@ -29,7 +29,7 @@ tailrec suspend fun select(q: String, options: List<String>, default: String? = 
 	}
 }
 
-tailrec suspend fun <T> select(q: String, options: List<T>, default: T? = null, stream: Duplex = SystemStream): T
+tailrec fun <T> select(q: String, options: List<T>, default: T? = null, stream: Duplex = SystemStream): T
 {
 	require(options.isNotEmpty()) { "Argument options cannot be empty" }
 	
@@ -52,7 +52,7 @@ tailrec suspend fun <T> select(q: String, options: List<T>, default: T? = null, 
 	return select(q, options, default, stream)
 }
 
-suspend inline fun <reified T: Enum<T>> select(q: String, default: T? = null, stream: Duplex = SystemStream): T
+inline fun <reified T: Enum<T>> select(q: String, default: T? = null, stream: Duplex = SystemStream): T
 {
 	val options: List<String> = enumValues<T>().map { it.name }.toList()
 	val answer: String = select(q, options, default?.name, stream)
