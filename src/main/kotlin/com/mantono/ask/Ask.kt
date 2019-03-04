@@ -12,10 +12,8 @@ package com.mantono.ask
  * communicating with the user
  * @return a value, which is either the default value or the user's response
  */
-inline fun <reified T> ask(q: String, default: T? = null, stream: Duplex = SystemStream): T
-{
-	while(true)
-	{
+inline fun <reified T> ask(q: String, default: T? = null, stream: Duplex = SystemStream): T {
+	while(true) {
 		readLine(q, default, stream)?.let { return it }
 	}
 }
@@ -30,13 +28,16 @@ inline fun <reified T> ask(q: String, default: T? = null, stream: Duplex = Syste
  * @param stream is a [Duplex], representing a means of input and output for
  * communicating with the user
  */
-inline fun <reified T: Comparable<T>> ask(q: String, range: ClosedRange<T>, default: T? = null, stream: Duplex = SystemStream): T
-{
+inline fun <reified T: Comparable<T>> ask(
+	q: String,
+	range: ClosedRange<T>,
+	default: T? = null,
+	stream: Duplex = SystemStream
+): T {
 	default?.let {
 		require(it in range) { "Default argument $default is outside range $range" }
 	}
-	while(true)
-	{
+	while(true) {
 		readLine(q, default, stream)?.let { if(it in range) return it }
 	}
 }
@@ -48,10 +49,12 @@ inline fun <reified T: Comparable<T>> ask(q: String, range: ClosedRange<T>, defa
  * @param stream is a [Duplex], representing a means of input and output for
  * communicating with the user
  */
-inline fun <reified T> ask(q: String, default: T? = null, stream: Duplex = SystemStream, parse: (String) -> T?): T
-{
-	while(true)
-	{
+inline fun <reified T> ask(
+	q: String,
+	default: T? = null,
+	stream: Duplex = SystemStream,
+	parse: (String) -> T?): T {
+	while(true) {
 		readLine(q, default, stream, parse)?.let { return it }
 	}
 }
@@ -68,15 +71,16 @@ inline fun <reified T> ask(q: String, default: T? = null, stream: Duplex = Syste
  * communicating with the user
  * @return a value, which is either the default value or the user's response
  */
-tailrec fun ask(q: String, default: String? = null, stream: Duplex = SystemStream): String
-{
+tailrec fun ask(
+	q: String,
+	default: String? = null,
+	stream: Duplex = SystemStream
+): String {
 	val response: String = readLine(q, default, stream = stream) ?: ""
 
-	return when
-	{
+	return when {
 		response.isNotBlank() -> response
-		else ->
-		{
+		else -> {
 			stream.write(err("This value is mandatory, please provide an input.\n"))
 			ask(q, default, stream)
 		}
@@ -96,11 +100,14 @@ tailrec fun ask(q: String, default: String? = null, stream: Duplex = SystemStrea
  * communicating with the user
  * @return a value, which is either the default value or the user's response
  */
-tailrec fun ask(q: String, regex: Regex, default: String? = null, stream: Duplex = SystemStream): String
-{
+tailrec fun ask(
+	q: String,
+	regex: Regex,
+	default: String? = null,
+	stream: Duplex = SystemStream
+): String {
 	val response: String = readLine(q, default, stream) ?: ""
-	return when(response.matches(regex))
-	{
+	return when(response.matches(regex)) {
 		true -> response
 		false -> {
 			stream.write(err("The provided input does not match regex $regex\n"))
@@ -123,18 +130,18 @@ tailrec fun ask(q: String, regex: Regex, default: String? = null, stream: Duplex
  * communicating with the user
  * @return a value, which is either the default value or the user's response
  */
-tailrec fun askBinary(q: String, default: Boolean? = null, stream: Duplex = SystemStream): Boolean
-{
+tailrec fun askBinary(
+	q: String,
+	default: Boolean? = null,
+	stream: Duplex = SystemStream
+): Boolean {
 	val response: String = readLine(q, default?.yesOrNo(), stream)?.toLowerCase() ?: ""
-	return when(response)
-	{
+	return when(response) {
 		"yes", "y", "true" -> true
 		"no", "n", "false" -> false
-		else -> when(response.isBlank())
-		{
+		else -> when(response.isBlank()) {
 			true -> default ?: askBinary(q, stream = stream)
-			false ->
-			{
+			false -> {
 				stream.write(err("Please answer yes/y or no/n\n"))
 				askBinary(q, default, stream)
 			}

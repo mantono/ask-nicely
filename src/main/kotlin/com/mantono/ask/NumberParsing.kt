@@ -12,14 +12,12 @@ fun String.isFloat(): Boolean = floatRegex.matches(this)
 private val doubleRegex = Regex("^\\d+(\\.?\\d*)\$")
 fun String.isDouble(): Boolean = doubleRegex.matches(this)
 
-fun String.isByte(): Boolean
-{
+fun String.isByte(): Boolean {
 	if(!isInt()) return false
 	return toInt() in Byte.MIN_VALUE .. Byte.MAX_VALUE
 }
 
-fun String.isShort(): Boolean
-{
+fun String.isShort(): Boolean {
 	if(!isInt()) return false
 	return toInt() in Short.MIN_VALUE .. Short.MAX_VALUE
 }

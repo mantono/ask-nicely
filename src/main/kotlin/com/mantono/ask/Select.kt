@@ -1,7 +1,11 @@
 package com.mantono.ask
 
-fun select(q: String, options: List<String>, default: String? = null, stream: Duplex = SystemStream): String
-{
+fun select(
+	q: String,
+	options: List<String>,
+	default: String? = null,
+	stream: Duplex = SystemStream
+): String {
 	require(options.isNotEmpty()) { "Argument options cannot be empty" }
 
 	default?.let {
@@ -12,13 +16,10 @@ fun select(q: String, options: List<String>, default: String? = null, stream: Du
 	options.forEachIndexed { i, opt -> stream.write("$i) $opt\n") }
 	val answer: String = readLine(q, stream = stream) ?: ""
 	default?.let { if(answer.isBlank()) return default }
-	return when(answer in options)
-	{
+	return when(answer in options) {
 		true -> answer
-		false ->
-		{
-			if(answer.isInt())
-			{
+		false -> {
+			if(answer.isInt()) {
 				val i: Int = answer.toInt()
 				if(i in options.indices)
 					return options[i]
@@ -29,8 +30,12 @@ fun select(q: String, options: List<String>, default: String? = null, stream: Du
 	}
 }
 
-tailrec fun <T> select(q: String, options: List<T>, default: T? = null, stream: Duplex = SystemStream): T
-{
+tailrec fun <T> select(
+	q: String,
+	options: List<T>,
+	default: T? = null,
+	stream: Duplex = SystemStream
+): T {
 	require(options.isNotEmpty()) { "Argument options cannot be empty" }
 	
 	default?.let {
@@ -42,8 +47,7 @@ tailrec fun <T> select(q: String, options: List<T>, default: T? = null, stream: 
 	val answer: String = readLine(q, stream = stream) ?: ""
 	default?.let { if(answer.isBlank()) return default }
 
-	if(answer.isInt())
-	{
+	if(answer.isInt()) {
 		val i: Int = answer.toInt()
 		if(i in options.indices)
 			return options[i]
@@ -52,8 +56,11 @@ tailrec fun <T> select(q: String, options: List<T>, default: T? = null, stream: 
 	return select(q, options, default, stream)
 }
 
-inline fun <reified T: Enum<T>> select(q: String, default: T? = null, stream: Duplex = SystemStream): T
-{
+inline fun <reified T: Enum<T>> select(
+	q: String,
+	default: T? = null,
+	stream: Duplex = SystemStream
+): T {
 	val options: List<String> = enumValues<T>().map { it.name }.toList()
 	val answer: String = select(q, options, default?.name, stream)
 	return enumValueOf(answer)

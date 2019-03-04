@@ -13,25 +13,21 @@ import java.util.*
  * be done without relying on the [java.io.PrintStream] in [System] when executing
  * test cases.
  */
-interface Duplex: Closeable
-{
+interface Duplex: Closeable {
 	fun read(): String
 	fun write(data: String): Int
 }
 
-class DuplexStream(private val input: InputStream, private val output: OutputStream): Duplex
-{
+class DuplexStream(private val input: InputStream, private val output: OutputStream): Duplex {
 	override fun read(): String = Scanner(input).nextLine()
 
-	override fun write(data: String): Int
-	{
+	override fun write(data: String): Int {
 		val bytes = data.toByteArray()
 		output.write(bytes)
 		return bytes.size
 	}
 
-	override fun close()
-	{
+	override fun close() {
 		input.close()
 		output.close()
 	}
@@ -40,7 +36,6 @@ class DuplexStream(private val input: InputStream, private val output: OutputStr
 /**
  * A DuplexStream, communicating with [System.in] and [System.out].
  */
-object SystemStream: Duplex by DuplexStream(System.`in`, System.out)
-{
+object SystemStream: Duplex by DuplexStream(System.`in`, System.out) {
 	override fun close() { }
 }

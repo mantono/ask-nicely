@@ -18,8 +18,11 @@ val reset: AnsiCode = trueColor.reset
  * does not apply any retry logic if the result is null or the user provide an empty input.
  * For that sort of functionality should [readLine] be used.
  */
-fun readLine(prompt: String, default: String? = null, stream: Duplex = SystemStream): String?
-{
+fun readLine(
+	prompt: String,
+	default: String? = null,
+	stream: Duplex = SystemStream
+): String? {
 	val def: String = if(default.isNullOrBlank()) "" else "$bold[$default]$reset"
 	stream.write("$prompt$def:")
 	val answer: String = stream.read()
@@ -31,17 +34,18 @@ fun readLine(prompt: String, default: String? = null, stream: Duplex = SystemStr
  *  This function can take any primitive type, and also [BigInteger] and [BigDecimal]
  *  and parse the use input as such.
  */
-inline fun <reified T> readLine(prompt: String, default: T? = null, stream: Duplex = SystemStream): T?
-{
+inline fun <reified T> readLine(
+	prompt: String,
+	default: T? = null,
+	stream: Duplex = SystemStream
+): T? {
 	val def = default?.let { "[$default]" } ?: ""
 	stream.write("$prompt$def:")
 	val answer: String = stream.read()
 	if(answer.isBlank()) return default
 
-	return try
-	{
-		when(T::class)
-		{
+	return try {
+		when(T::class) {
 			Byte::class -> answer.toByte() as T
 			Short::class -> answer.toShort() as T
 			Int::class -> answer.toInt() as T
@@ -54,9 +58,7 @@ inline fun <reified T> readLine(prompt: String, default: T? = null, stream: Dupl
 			String::class -> answer as T
 			else -> throw IllegalArgumentException("Unsupported class for parsing: ${T::class::qualifiedName}")
 		}
-	}
-	catch(e: NumberFormatException)
-	{
+	} catch(e: NumberFormatException) {
 		stream.write(err("A ${T::class.simpleName} was expected, but '$answer' could not be parsed as such"))
 		null
 	}
@@ -67,18 +69,19 @@ inline fun <reified T> readLine(prompt: String, default: T? = null, stream: Dupl
  * data that can be converted from a String. It does however require an extra argument, a parsing function
  * @param parse that can parse the String input into the given type [T].
  */
-inline fun <T> readLine(prompt: String, default: T? = null, stream: Duplex = SystemStream, parse: (String) -> T?): T?
-{
+inline fun <T> readLine(
+	prompt: String,
+	default: T? = null,
+	stream: Duplex = SystemStream,
+	parse: (String) -> T?
+): T? {
 	val def = default?.let { "[$default]" } ?: ""
 	stream.write("$prompt$def:")
 	val answer: String = stream.read()
-	return try
-	{
+	return try {
 		val parsedInput: T? = parse(answer)
 		parsedInput ?: default
-	}
-	catch(e: Exception)
-	{
+	} catch(e: Exception) {
 		stream.write(err("$e\n"))
 		null
 	}
