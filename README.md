@@ -7,7 +7,6 @@ process of user input/output via the command line. This is done by inferred typi
 automatic parsing of inputs (as much that is possible, and more importantly, that
 can be done safely in a statically typed language) so that writing applications
 that depends on user input via a terminal can be done as swiftly as possible.
-is
 
 ## Why
 Without any help from a third party library, reading and processing user input
