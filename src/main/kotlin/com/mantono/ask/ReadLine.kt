@@ -4,6 +4,7 @@ import com.github.ajalt.mordant.AnsiCode
 import com.github.ajalt.mordant.TermColors
 import java.math.BigDecimal
 import java.math.BigInteger
+import java.net.URI
 
 private val trueColor: TermColors = TermColors(TermColors.Level.TRUECOLOR)
 val bold: AnsiCode = trueColor.bold
@@ -56,6 +57,7 @@ inline fun <reified T> readLine(
 			BigInteger::class -> BigInteger(answer) as T
 			BigDecimal::class -> BigDecimal(answer) as T
 			String::class -> answer as T
+			URI::class -> URI(answer) as T
 			else -> throw IllegalArgumentException("Unsupported class for parsing: ${T::class::qualifiedName}")
 		}
 	} catch(e: NumberFormatException) {
