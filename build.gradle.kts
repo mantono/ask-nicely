@@ -14,6 +14,7 @@ plugins {
 	id("java") apply true
 	id("maven") apply true
 	id("idea") apply true
+	id("maven-publish") apply true
 }
 
 application {
@@ -41,6 +42,27 @@ dependencies {
 	// Junit
 	testCompile("org.junit.jupiter", "junit-jupiter-api", Version.JUNIT)
 	testRuntime("org.junit.jupiter", "junit-jupiter-engine", Version.JUNIT)
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GithubPackages"
+            url = uri("https://maven.pkg.github.com/mantono/${project.name}")
+            credentials {
+                username = "mantono"
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+    publications {
+        register("gpr", MavenPublication::class) {
+            this.artifactId = project.name
+            this.groupId = project.group.toString()
+            this.version = project.version.toString()
+            from(components["java"])
+        }
+    }
 }
 
 tasks {
